@@ -22,7 +22,7 @@ module KubesGoogle
         key = secret.name.sub(@prefix,'')
         key = key.upcase if @upcase
         value = version.payload.data
-        self.class.data[key] = Base64.encode64(value).strip
+        self.class.data[key] = value
       end
     end
 

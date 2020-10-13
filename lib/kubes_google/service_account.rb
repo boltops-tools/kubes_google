@@ -77,7 +77,7 @@ module KubesGoogle
       logger.debug "=> #{command}"
       success = system(command)
       unless success
-        logger.info "ERROR: Running #{command}"
+        logger.info "WARN: Running #{command}"
       end
       success
     end

@@ -20,9 +20,8 @@ Set up a [Kubes hook](https://kubes.guru/docs/config/hooks/kubes/).
 .kubes/config/hooks/kubes.rb
 
 ```ruby
-ENV['GCP_SECRET_PREFIX'] ||= 'projects/686010496118/secrets/demo-dev-'
 before("compile",
-  execute: KubesGoogle::Secrets.new(upcase: true)
+  execute: KubesGoogle::Secrets.new(upcase: true, prefix: 'projects/686010496118/secrets/demo-dev-')
 )
 ```
 
@@ -39,7 +38,7 @@ metadata:
     app: demo
 data:
 <% KubesGoogle::Secrets.data.each do |k,v| -%>
-  <%= k %>: <%= v %>
+  <%= k %>: <%= Base64.encode64(v).strip %>
 <% end -%>
 ```
 
