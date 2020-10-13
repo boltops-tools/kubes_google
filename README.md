@@ -95,7 +95,7 @@ Here's a Kubes hook that creates a service account:
 ```ruby
 service_account = KubesGoogle::ServiceAccount.new(
   app: "demo",
-  namespace: "demo-dev", # defaults to APP-ENV when not set. IE: demo-dev
+  namespace: "demo-#{Kubes.env}", # defaults to APP-ENV when not set. IE: demo-dev
   roles: ["cloudsql.client", "secretmanager.viewer"], # defaults to empty when not set
 )
 before("apply",
