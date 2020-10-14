@@ -2,8 +2,8 @@ require "google-cloud-secret_manager"
 
 module KubesGoogle
   class Secrets
-    def initialize(upcase: false, prefix: nil)
-      @upcase = upcase
+    def initialize(upcase: false, base64: false, prefix: nil)
+      @upcase, @base64 = upcase, base64
       @prefix = ENV['GCP_SECRET_PREFIX'] || prefix || raise("GOOGLE_PROJECT env variable is not set. It's required.")
       @project_id = ENV['GOOGLE_PROJECT']
       # IE: prefix: projects/686010496118/secrets/demo-dev-
@@ -22,8 +22,14 @@ module KubesGoogle
         key = secret.name.sub(@prefix,'')
         key = key.upcase if @upcase
         value = version.payload.data
+        # strict_encode64 to avoid newlines https://stackoverflow.com/questions/2620975/strange-n-in-base64-encoded-string-in-ruby
+        value = Base64.strict_encode64(value).strip if @base64
         self.class.data[key] = value
       end
+    end
+
+    def data
+      self.class.data
     end
 
     class_attribute :data
