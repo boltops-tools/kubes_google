@@ -29,7 +29,7 @@ Then set the secrets in the YAML:
 
 .kubes/resources/shared/secret.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
