@@ -4,8 +4,8 @@ module KubesGoogle
   class Secrets
     def initialize(upcase: false, base64: false, prefix: nil)
       @upcase, @base64 = upcase, base64
-      @prefix = ENV['GCP_SECRET_PREFIX'] || prefix || raise("GOOGLE_PROJECT env variable is not set. It's required.")
-      @project_id = ENV['GOOGLE_PROJECT']
+      @prefix = ENV['GCP_SECRET_PREFIX'] || prefix
+      @project_id = ENV['GOOGLE_PROJECT'] || raise("GOOGLE_PROJECT env variable is not set. It's required.")
       # IE: prefix: projects/686010496118/secrets/demo-dev-
     end
 
@@ -13,7 +13,7 @@ module KubesGoogle
       client = Google::Cloud::SecretManager.secret_manager_service
 
       parent = "projects/#{@project_id}"
-      resp = client.list_secrets(parent: parent, page_size: 1)
+      resp = client.list_secrets(parent: parent) # note: page_size doesnt seem to get respected
       resp.each do |secret|
         next unless secret.name.include?(@prefix)
         version = client.access_secret_version(name: "#{secret.name}/versions/latest")
