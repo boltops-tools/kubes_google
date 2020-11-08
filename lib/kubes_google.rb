@@ -18,3 +18,5 @@ module KubesGoogle
 
   extend self
 end
+
+Kubes::Plugin.register(KubesGoogle)
