@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.0]
+- #3 gke hook to whitelist ip
+
 ## [0.2.0]
 - #2 add google_secret helper and register plugin
 - fix GOOGLE_PROJECT check
