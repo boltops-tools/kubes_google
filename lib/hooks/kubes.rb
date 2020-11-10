@@ -4,9 +4,11 @@ gke = KubesGoogle::Gke.new(
 )
 
 before("apply",
+  label: "gke whitelist hook",
   execute: gke.method(:allow).to_proc,
 )
 
 after("apply",
+  label: "gke whitelist hook",
   execute: gke.method(:deny).to_proc,
 )

@@ -16,7 +16,12 @@ module KubesGoogle
     @@logger = v
   end
 
-  # Friendlier method for .kubes/config/plugins/google.rb. Example:
+  # Friendlier method configure.
+  #
+  #    .kubes/config/env/dev.rb
+  #    .kubes/config/plugins/google.rb # also works
+  #
+  # Example:
   #
   #     KubesGoogle.configure do |config|
   #       config.hooks.gke_whitelist = true
