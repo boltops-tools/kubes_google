@@ -4,6 +4,7 @@ require "json"
 module KubesGoogle
   class ServiceAccount
     include Logging
+    include Util::Sh
 
     def initialize(app:, namespace:nil, roles: [], gsa: nil, ksa: nil)
       @app, @roles = app, roles
@@ -70,26 +71,6 @@ module KubesGoogle
       sh "gcloud projects add-iam-policy-binding #{@google_project} \
           --member=serviceAccount:#{@service_account} \
           --role=#{role} > /dev/null".squish
-    end
-
-  private
-    def sh(command)
-      logger.debug "=> #{command}"
-      success = system(command)
-      unless success
-        logger.info "WARN: Running #{command}"
-      end
-      success
-    end
-
-    def capture(command)
-      out = `#{command}`
-      unless $?.exitstatus == 0
-        logger.info "ERROR: Running #{command}"
-        logger.info out
-        exit 1
-      end
-      out
     end
   end
 end

@@ -5,35 +5,56 @@ module KubesGoogle
     extend Memoist
     include Logging
     include Services
+    include Util::Sh
 
-    def initialize(name:, whitelist_ip: nil)
-      @name, @whitelist_ip = name, whitelist_ip
+    def initialize(cluster_name:,
+                   enable_get_credentials: false,
+                   google_project: nil,
+                   google_region: "us-central1",
+                   whitelist_ip: nil)
+      @cluster_name = cluster_name
+      @enable_get_credentials = enable_get_credentials
+      @google_project = ENV['GOOGLE_PROJECT'] || google_project
+      @google_region = ENV['GOOGLE_REGION'] || google_region
+      @whitelist_ip = whitelist_ip
     end
 
     def allow
-      return unless enabled?
       logger.debug "Updating cluster. Adding IP: #{ip}"
       update_cluster(cidr_blocks(:with_whitelist))
     end
 
     def deny
-      return unless enabled?
       logger.debug "Updating cluster. Removing IP: #{ip}"
       update_cluster(cidr_blocks(:without_whitelist))
     end
 
-    # Setting the cluster name is enough to enable the hooks
+    def get_credentials
+      return unless get_credentials_enabled?
+      sh "gcloud container clusters get-credentials --project=#{@google_project} --region=#{@google_region} #{@cluster_name}"
+    end
+
+    def full_name
+      "projects/#{@google_project}/locations/#{@google_region}/clusters/#{@cluster_name}"
+    end
+
     def enabled?
       enable = KubesGoogle.config.gke.enable_hooks
       enable = enable.nil? ? true : enable
       # gke = KubesGoogle::Gke.new(name: KubesGoogle.config.gke.cluster_name)
       # so @name = KubesGoogle.config.gke.cluster_name
-      !!(enable && @name)
+      !!(enable && @cluster_name)
+    end
+
+    def get_credentials_enabled?
+      enable = KubesGoogle.config.gke.enable_get_credentials
+      enable = enable.nil? ? false : enable
+      !!(enable && full_name)
     end
 
     def update_cluster(cidr_blocks)
       resp = cluster_manager.update_cluster(
-        name: @name,
+        name: full_name,
         update: {
           desired_master_authorized_networks_config: {
             cidr_blocks: cidr_blocks,
@@ -67,7 +88,7 @@ module KubesGoogle
     end
 
     def old_cidrs
-      resp = cluster_manager.get_cluster(name: @name)
+      resp = cluster_manager.get_cluster(name: full_name)
       config = resp.master_authorized_networks_config.to_h
       config[:cidr_blocks]
     end
