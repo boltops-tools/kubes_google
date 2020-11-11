@@ -5,14 +5,18 @@ class KubesGoogle::Secrets
 
     def initialize(options={})
       @options = options
-      @base64 = options[:base64].nil? ? true : options[:base64]
+      @base64 = options[:base64]
       @project_id = ENV['GOOGLE_PROJECT'] || raise("GOOGLE_PROJECT env variable is not set. It's required.")
     end
 
     def fetch(short_name)
       value = fetch_value(short_name)
-      value = Base64.strict_encode64(value).strip if @base64
+      value = Base64.strict_encode64(value).strip if base64?
       value
+    end
+
+    def base64?
+      @base64.nil? ? KubesGoogle.config.base64_secrets : @base64
     end
 
     def fetch_value(short_name)
