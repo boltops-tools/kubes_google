@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.5] - 2020-11-12
+- add KubesGoogle.cloudbuild? check
+- fetcher sdk friendly suggestion to use gcloud when vpn errors
+
 ## [0.3.4] - 2020-11-12
 - fix KubesGoogle.config.secrets.fetcher check
 
