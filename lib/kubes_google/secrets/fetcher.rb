@@ -11,7 +11,7 @@ class KubesGoogle::Secrets
     end
 
     def fetcher
-      if Kubes.config.secrets_fetcher == "sdk"
+      if KubesGoogle.config.secrets.fetcher == "sdk"
         Sdk.new(@options)
       else
         Gcloud.new(@options)

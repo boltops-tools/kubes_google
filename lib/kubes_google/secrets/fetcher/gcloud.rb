@@ -3,7 +3,6 @@ class KubesGoogle::Secrets::Fetcher
     include KubesGoogle::Util::Sh
 
     def fetch(short_name, version="latest")
-      puts "gcloud fetch #{short_name}"
       value = gcloud("secrets versions access #{version} --secret #{short_name}")
       if value.include?("ERROR") && value.include?("NOT_FOUND")
         logger.info "WARN: secret #{short_name} not found".color(:yellow)
