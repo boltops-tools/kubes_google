@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.4] - 2020-11-12
+- fix KubesGoogle.config.secrets.fetcher check
+
 ## [0.3.3] - 2020-11-12
 - [#6](https://github.com/boltops-tools/kubes_google/pull/6) sdk and gcloud secrets fetcher strategy: secrets.fetcher option
 
