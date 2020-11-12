@@ -35,6 +35,10 @@ module KubesGoogle
     Config.instance.config
   end
 
+  def cloudbuild?
+    !!ENV['BUILDER_OUTPUT'] # cloudbuild env vars: https://gist.github.com/tongueroo/7ae26abd60d30da3972e86b4e7ca315e
+  end
+
   extend self
 end
 
