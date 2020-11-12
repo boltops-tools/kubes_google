@@ -29,6 +29,19 @@ class KubesGoogle::Secrets::Fetcher
       resp = secret_manager_service.list_secrets(parent: parent) # note: page_size doesnt seem to get respected
       name = resp.first.name # IE: projects/686010496118/secrets/demo-dev-db_host
       @@project_number = name.split('/')[1]
+    rescue Google::Cloud::UnavailableError => e
+      logger.error "ERROR: #{e.message}"
+      if e.message.include?("failed to connect")
+        logger.info <<~EOL
+          SSL Handshake failed. This error seems to happen with some VPN setups.
+          Please try the gcloud fetcher instead. To set up see:
+
+            https://kubes.guru/docs/helpers/google/secrets/#fetcher-strategy
+        EOL
+        exit 1
+      else
+        raise
+      end
     end
   end
 end
