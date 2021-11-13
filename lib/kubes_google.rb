@@ -6,6 +6,7 @@ KubesGoogle::Autoloader.setup
 
 module KubesGoogle
   class Error < StandardError; end
+  class VpnSslError < StandardError; end
 
   @@logger = nil
   def logger

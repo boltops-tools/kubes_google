@@ -16,6 +16,20 @@ class KubesGoogle::Secrets::Fetcher
       logger.info "WARN: secret #{name} not found".color(:yellow)
       logger.info e.message
       "NOT FOUND #{name}" # simple string so Kubernetes YAML is valid
+    rescue Google::Cloud::UnavailableError => e
+      logger.error "ERROR: #{e.message}"
+      if e.message.include?("failed to connect")
+        logger.info <<~EOL
+          WARNING: SSL Handshake failed. This error seems to happen with some VPN setups.
+          You can turn off this warning by setting the gcloud fetcher instead.
+          To set up see:
+
+            https://kubes.guru/docs/helpers/google/secrets/#fetcher-strategy
+        EOL
+        raise KubesGoogle::VpnSslError
+      else
+        raise
+      end
     end
 
   private
