@@ -18,30 +18,12 @@ class KubesGoogle::Secrets::Fetcher
       "NOT FOUND #{name}" # simple string so Kubernetes YAML is valid
     end
 
-    # TODO: Get the project from the list project api instead. Unsure where the docs are for this.
-    # If someone knows, let me know.
-    # Right now grabbing the first secret to then be able to get the google project number
+  private
     @@project_number = nil
     def project_number
       return @@project_number if @@project_number
-
-      parent = "projects/#{@project_id}"
-      resp = secret_manager_service.list_secrets(parent: parent) # note: page_size doesnt seem to get respected
-      name = resp.first.name # IE: projects/686010496118/secrets/demo-dev-db_host
-      @@project_number = name.split('/')[1]
-    rescue Google::Cloud::UnavailableError => e
-      logger.error "ERROR: #{e.message}"
-      if e.message.include?("failed to connect")
-        logger.info <<~EOL
-          SSL Handshake failed. This error seems to happen with some VPN setups.
-          Please try the gcloud fetcher instead. To set up see:
-
-            https://kubes.guru/docs/helpers/google/secrets/#fetcher-strategy
-        EOL
-        exit 1
-      else
-        raise
-      end
+      project = resource_manager.project(@project_id)
+      @@project_number = project.project_number
     end
   end
 end
