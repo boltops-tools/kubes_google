@@ -40,6 +40,7 @@ module KubesGoogle
       sh "gcloud iam service-accounts add-iam-policy-binding \
                 --role roles/iam.workloadIdentityUser \
                 --member #{member} \
+                --condition=None \
                 #{@service_account}".squish
     end
 
