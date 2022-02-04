@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.6] - 2022-02-04
+- [#7](https://github.com/boltops-tools/kubes_google/pull/7) Secret auto retry with gcloud strategy
+- [#8](https://github.com/boltops-tools/kubes_google/pull/8) add condition none
+- get google project number via api
+
 ## [0.3.5] - 2020-11-12
 - add KubesGoogle.cloudbuild? check
 - fetcher sdk friendly suggestion to use gcloud when vpn errors
