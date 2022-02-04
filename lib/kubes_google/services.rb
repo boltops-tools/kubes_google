@@ -1,3 +1,4 @@
+require "google-cloud-resource_manager"
 require "google-cloud-secret_manager"
 require "google/cloud/container"
 
@@ -14,6 +15,11 @@ module KubesGoogle
       Google::Cloud::SecretManager.secret_manager_service
     end
     memoize :secret_manager_service
+
+    def resource_manager
+      Google::Cloud.new.resource_manager
+    end
+    memoize :resource_manager
   end
 end
 

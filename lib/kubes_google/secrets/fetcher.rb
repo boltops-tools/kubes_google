@@ -8,6 +8,10 @@ class KubesGoogle::Secrets
 
     def fetch(short_name)
       fetcher.fetch(short_name)
+    rescue KubesGoogle::VpnSslError
+      logger.info "Retry fetching secret with the gcloud strategy"
+      fetcher = Gcloud.new(@options)
+      fetcher.fetch(short_name)
     end
 
     def fetcher
