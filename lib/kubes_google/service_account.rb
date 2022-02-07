@@ -71,6 +71,7 @@ module KubesGoogle
 
       sh "gcloud projects add-iam-policy-binding #{@google_project} \
           --member=serviceAccount:#{@service_account} \
+          --condition=None \
           --role=#{role} > /dev/null".squish
     end
   end
