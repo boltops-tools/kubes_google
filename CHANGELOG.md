@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.7] - 2022-02-07
+- [#9](https://github.com/boltops-tools/kubes_google/pull/9) performance improvement: cache secrets
+
 ## [0.3.6] - 2022-02-04
 - [#7](https://github.com/boltops-tools/kubes_google/pull/7) Secret auto retry with gcloud strategy
 - [#8](https://github.com/boltops-tools/kubes_google/pull/8) add condition none
