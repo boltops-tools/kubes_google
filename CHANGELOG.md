@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.9] - 2022-02-16
+- [#10](https://github.com/boltops-tools/kubes_google/pull/10) google_secret_data helper
+
 ## [0.3.8] - 2022-02-07
 - fix service account creation: add condition none
 
