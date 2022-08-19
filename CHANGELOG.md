@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.10] - 2022-08-19
+- [#11](https://github.com/boltops-tools/kubes_google/pull/11) Google service account fixes
+- KUBES_MOCK_SECRET ability
+- dont add project iam binding if already exists
+- fix iam service has_role? check
+
 ## [0.3.9] - 2022-02-16
 - [#10](https://github.com/boltops-tools/kubes_google/pull/10) google_secret_data helper
 
