@@ -34,14 +34,14 @@ module KubesGoogle
       logger.debug "Creating GKE IAM Binding"
       member = "serviceAccount:#{@google_project}.svc.id.goog[#{@namespace}/#{@ksa}]"
 
-      found = sh "gcloud iam service-accounts get-iam-policy #{@service_account} | grep -F #{member} > /dev/null"
+      found = sh "gcloud iam service-accounts get-iam-policy '#{@service_account}' | grep -F '#{member}' > /dev/null"
       return if found
 
       sh "gcloud iam service-accounts add-iam-policy-binding \
                 --role roles/iam.workloadIdentityUser \
-                --member #{member} \
+                --member '#{member}' \
                 --condition=None \
-                #{@service_account}".squish
+                '#{@service_account}'".squish
     end
 
     def add_roles
@@ -58,21 +58,28 @@ module KubesGoogle
     end
 
     def has_role?(role)
-      out = capture "gcloud projects get-iam-policy #{@google_project} --format json"
-      data = JSON.load(out)
+      data = project_iam_policies
       bindings = data['bindings']
       binding = bindings.find { |b| b['role'] == role }
       return false unless binding
-      binding['members'].include?(@service_account)
+      binding['members'].include?("serviceAccount:#{@service_account}")
+    end
+
+    @@project_iam_policies = nil
+    def project_iam_policies
+      return @@project_iam_policies if @@project_iam_policies
+      logger.debug "=> gcloud projects get-iam-policy #{@google_project} --format json"
+      out = capture "gcloud projects get-iam-policy #{@google_project} --format json"
+      @@project_iam_policies = JSON.load(out)
     end
 
     def add_role(role)
       return if has_role?(role)
 
       sh "gcloud projects add-iam-policy-binding #{@google_project} \
-          --member=serviceAccount:#{@service_account} \
+          --member='serviceAccount:#{@service_account}' \
           --condition=None \
-          --role=#{role} > /dev/null".squish
+          --role='#{role}' > /dev/null".squish
     end
   end
 end

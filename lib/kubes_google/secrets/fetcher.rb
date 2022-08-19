@@ -10,8 +10,13 @@ class KubesGoogle::Secrets
     @@cache = {}
     def fetch(short_name)
       return @@cache[short_name] if @@cache[short_name]
-      logger.debug "Fetching secret: #{short_name}"
-      @@cache[short_name] = fetcher.fetch(short_name)
+      if ENV['KUBES_MOCK_SECRET']
+        logger.info "KUBES_MOCK_SECRET=1 is set. Mocking secret: #{short_name}"
+        @@cache[short_name] = "mock"
+      else
+        logger.debug "Fetching secret: #{short_name}"
+        @@cache[short_name] = fetcher.fetch(short_name)
+      end
     rescue KubesGoogle::VpnSslError
       logger.info "Retry fetching secret with the gcloud strategy"
       fetcher = Gcloud.new(@options)
