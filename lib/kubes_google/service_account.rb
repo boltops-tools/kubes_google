@@ -34,14 +34,14 @@ module KubesGoogle
       logger.debug "Creating GKE IAM Binding"
       member = "serviceAccount:#{@google_project}.svc.id.goog[#{@namespace}/#{@ksa}]"
 
-      found = sh "gcloud iam service-accounts get-iam-policy #{@service_account} | grep -F #{member} > /dev/null"
+      found = sh "gcloud iam service-accounts get-iam-policy '#{@service_account}' | grep -F '#{member}' > /dev/null"
       return if found
 
       sh "gcloud iam service-accounts add-iam-policy-binding \
                 --role roles/iam.workloadIdentityUser \
-                --member #{member} \
+                --member '#{member}' \
                 --condition=None \
-                #{@service_account}".squish
+                '#{@service_account}'".squish
     end
 
     def add_roles
@@ -70,9 +70,9 @@ module KubesGoogle
       return if has_role?(role)
 
       sh "gcloud projects add-iam-policy-binding #{@google_project} \
-          --member=serviceAccount:#{@service_account} \
+          --member='serviceAccount:#{@service_account}' \
           --condition=None \
-          --role=#{role} > /dev/null".squish
+          --role='#{role}' > /dev/null".squish
     end
   end
 end
