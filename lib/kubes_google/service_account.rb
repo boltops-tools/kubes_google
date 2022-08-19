@@ -58,12 +58,19 @@ module KubesGoogle
     end
 
     def has_role?(role)
-      out = capture "gcloud projects get-iam-policy #{@google_project} --format json"
-      data = JSON.load(out)
+      data = project_iam_policies
       bindings = data['bindings']
       binding = bindings.find { |b| b['role'] == role }
       return false unless binding
-      binding['members'].include?(@service_account)
+      binding['members'].include?("serviceAccount:#{@service_account}")
+    end
+
+    @@project_iam_policies = nil
+    def project_iam_policies
+      return @@project_iam_policies if @@project_iam_policies
+      logger.debug "=> gcloud projects get-iam-policy #{@google_project} --format json"
+      out = capture "gcloud projects get-iam-policy #{@google_project} --format json"
+      @@project_iam_policies = JSON.load(out)
     end
 
     def add_role(role)
