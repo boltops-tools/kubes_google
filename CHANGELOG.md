@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/), even before v1.0.
 
+## [0.3.11] - 2022-08-24
+- [#12](https://github.com/boltops-tools/kubes_google/pull/12) KUBES_MOCK_SECRET_QUIET env var support
+
 ## [0.3.10] - 2022-08-19
 - [#11](https://github.com/boltops-tools/kubes_google/pull/11) Google service account fixes
 - KUBES_MOCK_SECRET ability
