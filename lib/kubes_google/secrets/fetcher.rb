@@ -11,7 +11,7 @@ class KubesGoogle::Secrets
     def fetch(short_name)
       return @@cache[short_name] if @@cache[short_name]
       if ENV['KUBES_MOCK_SECRET']
-        logger.info "KUBES_MOCK_SECRET=1 is set. Mocking secret: #{short_name}"
+        logger.info "KUBES_MOCK_SECRET=1 is set. Mocking secret: #{short_name}" unless ENV['KUBES_MOCK_SECRET_QUIET']
         @@cache[short_name] = "mock"
       else
         logger.debug "Fetching secret: #{short_name}"
